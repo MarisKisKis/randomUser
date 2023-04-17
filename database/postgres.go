@@ -25,7 +25,7 @@ type User struct {
 	City                string `json:"city"`
 	State               string `json:"state"`
 	Country             string `json:"country"`
-	Postcode            string `json:"postcode"`
+	Postcode            int32  `json:"postcode"`
 	Latitude            string `json:"latitude"`
 	Longitude           string `json:"longitude"`
 	TimezoneOffset      string `json:"offset"`
