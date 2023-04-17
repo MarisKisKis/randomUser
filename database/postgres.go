@@ -9,7 +9,6 @@ import (
 	"github.com/joho/godotenv"
 	"log"
 	"os"
-	"random_User/model"
 )
 
 var db *gorm.DB
@@ -25,36 +24,36 @@ type User struct {
 	StreetName          string `json:"name"`
 	City                string `json:"city"`
 	State               string `json:"state"`
-	country             string `json:"country"`
-	postcode            string `json:"postcode"`
-	latitude            string `json:"latitude"`
-	longitude           string `json:"longitude"`
-	timezoneOffset      string `json:"offset"`
-	timezoneDescription string `json:"description"`
+	Country             string `json:"country"`
+	Postcode            string `json:"postcode"`
+	Latitude            string `json:"latitude"`
+	Longitude           string `json:"longitude"`
+	TimezoneOffset      string `json:"offset"`
+	TimezoneDescription string `json:"description"`
 	Email               string `json:"email"`
-	uuid                string `json:"uuid"`
-	username            string `json:"username"`
-	password            string `json:"password"`
-	salt                string `json:"salt"`
-	md5                 string `json:"md5"`
-	sha1                string `json:"sha1"`
-	sha256              string `json:"sha256"`
-	dobDate             string `json:"date"`
-	dobAge              int    `json:"age"`
-	registeredDate      string `json:"date"`
-	registeredAge       int    `json:"age"`
+	Uuid                string `json:"uuid"`
+	Username            string `json:"username"`
+	Password            string `json:"password"`
+	Salt                string `json:"salt"`
+	Md5                 string `json:"md5"`
+	Sha1                string `json:"sha1"`
+	Sha256              string `json:"sha256"`
+	DobDate             string `json:"date"`
+	DobAge              int    `json:"age"`
+	RegisteredDate      string `json:"date"`
+	RegisteredAge       int    `json:"age"`
 	Phone               string `json:"phone"`
-	cell                string `json:"cell"`
-	idName              string `json:"name"`
-	idValue             string `json:"value"`
-	pictureLarge        string `json:"large"`
-	pictureMedium       string `json:"medium"`
-	thumbnail           string `json:"thumbnail"`
-	nat                 string `json:"nat"`
-	seed                string `json:"seed"`
-	results             int    `json:"results"`
-	page                int    `json:"page"`
-	version             string `json:"version"`
+	Cell                string `json:"cell"`
+	IdName              string `json:"name"`
+	IdValue             string `json:"value"`
+	PictureLarge        string `json:"large"`
+	PictureMedium       string `json:"medium"`
+	Thumbnail           string `json:"thumbnail"`
+	Nat                 string `json:"nat"`
+	Seed                string `json:"seed"`
+	Results             int    `json:"results"`
+	Page                int    `json:"page"`
+	Version             string `json:"version"`
 }
 
 func getEnvVariable(key string) string {
@@ -91,10 +90,10 @@ func NewPostgreSQLClient() {
 
 }
 
-func CreateUser(a model.User) (model.User, error) {
+func CreateUser(a *User) (*User, error) {
 	res := db.Create(a)
 	if res.RowsAffected == 0 {
-		return model.User{}, errors.New("user not created")
+		return &User{}, errors.New("user not created")
 	}
 	return a, nil
 }
@@ -106,4 +105,22 @@ func GetUser(id string) (*User, error) {
 		return nil, errors.New("user not found")
 	}
 	return &user, nil
+}
+
+func GetAllUsers() ([]*User, error) {
+	var users []*User
+	res := db.Find(&users)
+	if res.Error != nil {
+		return nil, errors.New("authors not found")
+	}
+	return users, nil
+}
+
+func DeleteUser(id string) error {
+	var deleteUser User
+	result := db.Where(id).Delete(&deleteUser)
+	if result.RowsAffected == 0 {
+		return errors.New("user data not deleted")
+	}
+	return nil
 }
